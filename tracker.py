@@ -23,7 +23,6 @@ bot = Bot(token=token_bot)
 w3 = AsyncWeb3(AsyncHTTPProvider(api))
 buttons = InlineKeyboardMarkup(inline_keyboard=[])
 
-
 class Table():
     def __init__(self, address='', cursor='', connect='', user_id='', block=''):
         self.address = address
