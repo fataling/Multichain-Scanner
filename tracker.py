@@ -71,8 +71,7 @@ inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[
 async def start(message: types.Message):
     await message.answer(
         f'Hello! This tracker for Ethereum.\n'
-        f'If tracking wallet, use a button under.\n', reply_markup=inline_keyboard
-    )
+        f'If tracking wallet, use a button under.\n', reply_markup=inline_keyboard)
         
 @dp.callback_query(F.data == '/track')
 async def track_wallet(callback: CallbackQuery, state: FSMContext):
@@ -114,13 +113,11 @@ async def track_scanner(address, user_id):
                 hash_id = txn.get('hash').hex()
                 sender = txn.get('from')
                 recipient = txn.get('to')                
-                            
+        
                 if sender == address or recipient == address:
                     trackable = address
-                    
                     if hash_id in hash_set:
                         continue
-                    
                     else:
                         url = (f"https://sepolia.etherscan.io/tx/0x{hash_id}")
                         replies = (f'🚨 Found transaction! 🚨\n\n'
@@ -128,7 +125,6 @@ async def track_scanner(address, user_id):
                                    f'🔗 URL: {url}')
                         await bot.send_message(chat_id=user_id, text=replies, link_preview_options=LinkPreviewOptions(is_disabled=True), parse_mode='html')
                         hash_set.add(hash_id)
-                        
         except TransactionNotFound as e:
             log(f'{e}')
         await asyncio.sleep(3)
@@ -181,8 +177,7 @@ async def untrack_wallet_edit(message: Message, state: FSMContext):
         await tab.connect.commit()
     else:
         await message.reply('Your address not found to list, add his')
-    
-                         
+      
 tab = Table()
 
 async def main():
