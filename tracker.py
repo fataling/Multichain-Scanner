@@ -14,7 +14,6 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 log = logging.info
 
-
 api = 'api'
 token_bot = 'token_you_bot'
 
@@ -97,8 +96,7 @@ async def get_wallets(callback: CallbackQuery):
         for address in memory:
             data_addresses += f'{address[0]}\n\n'
             await callback.message.reply(f'Your addresses - \n\n'
-                                f'{data_addresses}'
-                                )
+                                         f'{data_addresses}')
     else: 
         await callback.message.reply('Your dont have address!')
 
@@ -126,9 +124,8 @@ async def track_scanner(address, user_id):
                     else:
                         url = (f"https://sepolia.etherscan.io/tx/0x{hash_id}")
                         replies = (f'🚨 Found transaction! 🚨\n\n'
-                            f'👤 Account : {trackable}\n\n'
-                            f'🔗 URL: {url}'
-                            )
+                                   f'👤 Account : {trackable}\n\n'
+                                   f'🔗 URL: {url}')
                         await bot.send_message(chat_id=user_id, text=replies, link_preview_options=LinkPreviewOptions(is_disabled=True), parse_mode='html')
                         hash_set.add(hash_id)
                         
@@ -140,7 +137,6 @@ async def track_scanner(address, user_id):
 async def button_handler(callback: CallbackQuery, state: FSMContext):
     if callback.data == 'Track':
         await track_wallet_edit(callback, state)
-    
     if callback.data == 'Untrack':
         await untrack_wallet_edit(callback, state)
         
@@ -155,7 +151,6 @@ async def track_wallet_edit(message: Message, state: FSMContext):
     if not address.startswith('0x'):
             await message.reply('Only 0x-format address tracking!')
             return
-
     if require > 0:
         await message.answer('This address already tracking!')
     else:
@@ -176,7 +171,6 @@ async def untrack_wallet_edit(message: Message, state: FSMContext):
     address = message.text
     user_id = message.from_user.id
     deleted = await message.answer('Untrack address...')
-    
     require = await tab.require_user(address, user_id)
     
     if require > 0:
@@ -185,7 +179,6 @@ async def untrack_wallet_edit(message: Message, state: FSMContext):
         await message.answer('Your address successfully untracking!')
         await bot.delete_message(chat_id=message.chat.id, message_id=deleted.message_id)
         await tab.connect.commit()
-        
     else:
         await message.reply('Your address not found to list, add his')
     
