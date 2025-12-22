@@ -53,7 +53,6 @@ class Table():
             result = await self.cursor.fetchone()
             num = result[0]
             return num
-            
     except aiosqlite.Error as e:
         log(f'{e}')
         
@@ -103,17 +102,14 @@ async def get_wallets(callback: CallbackQuery):
 async def track_scanner(address, user_id):
     log(f'search transactions...')
     hash_set = []
-    
     while True: 
         try:  
             block = await w3.eth.get_block('latest', full_transactions=True)
             transactions = block['transactions']
-            
             for txn in transactions:
                 hash_id = txn.get('hash').hex()
                 sender = txn.get('from')
                 recipient = txn.get('to')                
-        
                 if sender == address or recipient == address:
                     trackable = address
                     if hash_id in hash_set:
