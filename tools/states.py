@@ -1,7 +1,10 @@
 from aiogram.fsm.state import State, StatesGroup
 
 class ActionWallets(StatesGroup):
-    add_wallet = State()
-    remove_wallet = State()
+    eth_wallet = State()
+    bnb_wallet = State()
+    sol_wallet = State()
+    ton_wallet = State()
     
-    validator = State()
+    remove_wallet = State()
+    remove_all_wallet = State()
