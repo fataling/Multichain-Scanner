@@ -7,30 +7,39 @@ async def sql3_table() -> None:
             
             await csr.execute('CREATE TABLE IF NOT EXISTS Clients ('
                               'client_id BIGINT, '
-                              'row TEXT)'
+                              'row TEXT) '
                               )
         finally:
             if csr != None:
                 await csr.close()
             
-    
-async def sql3_remove_row(client, row) -> None:
+async def sql3_remove_row(client: int, row: str) -> None:
     async with aiosqlite.connect('Addresses.sqlite') as cnn:
         try:
             csr = await cnn.cursor()
             
-            data = await csr.execute('DELETE FROM Clients '
-                              'WHERE client_id = ? ' 
-                              'AND row = ?'
-                              (client, row)
-                              )
-            if csr.rowcount > 0:
-                return data
+            await csr.execute('DELETE FROM Clients WHERE client_id = ? AND row = ? ',
+                             (client, row)
+                             )
+            await cnn.commit()
         finally:
             if csr != None:
                 await csr.close()
                 
-async def sql3_receipt_row(client) -> None:
+async def sql3_remove_all_row(client: int) -> None:
+    async with aiosqlite.connect('Addresses.sqlite') as cnn:
+        try:
+            csr = await cnn.cursor()
+            
+            await csr.execute('DELETE FROM Clients WHERE client_id = ? ',
+                             (client, )
+                             )
+            await cnn.commit()
+        finally:
+            if csr != None:
+                await csr.close()
+                
+async def sql3_receipt_row(client: int) -> str | None:
     async with aiosqlite.connect('Addresses.sqlite') as cnn:
         try:
             csr = await cnn.cursor()
@@ -43,16 +52,16 @@ async def sql3_receipt_row(client) -> None:
             
             raw_data = await csr.fetchall()
             
-            data = []
-            for row in raw_data:
-                data.append(row)
-            return data
+            if raw_data != []:
+                rows = [row[0] for row in raw_data]
+                return rows
+            return None
         finally:
             if csr != None:
                 await csr.close()
-
-async def sql3_addopt_row(client, row) -> None:
-    async with aiosqlite.connect('Addresses.sqlite', isolation_level=None) as cnn:
+    
+async def sql3_addopt_row(client: int, row: str) -> None:
+    async with aiosqlite.connect('Addresses.sqlite') as cnn:
         try:
             csr = await cnn.cursor()
             
@@ -61,6 +70,7 @@ async def sql3_addopt_row(client, row) -> None:
                               'VALUES (?, ?)',
                               (client, row)
                               )
+            await cnn.commit()
         finally:
             if csr != None:
                 await csr.close()
