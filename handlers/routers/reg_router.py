@@ -6,8 +6,8 @@ from typing import Optional
 
 from others.states import ActionWallets
 from aiogram.filters import StateFilter
-from storage.db import sql3_addopt_row, sql3_receipt_row
 from keyboards.keyboard import back_menu_keyboard
+from storage.db import sql3_addopt_row, sql3_receipt_row
 
 from storage.lists_scanners import (eth_rows,
                                     bnb_rows, 
@@ -40,7 +40,6 @@ async def eth_valid_address(row: str) -> Optional[bool]:
 @reg_router.message(StateFilter(ActionWallets.eth_wallet))
 async def eth_reg_address(message: types.Message, state: FSMContext) -> None:
     eth_row = message.text
-    
     client_id = message.from_user.id
     
     await message.bot.send_chat_action(chat_id=client_id,
@@ -90,7 +89,6 @@ async def bnb_valid_address(row: str) -> Optional[bool]:
 @reg_router.message(StateFilter(ActionWallets.bnb_wallet))
 async def bnb_reg_address(message: types.Message, state: FSMContext) -> None:
     bnb_row = message.text
-    
     client_id = message.from_user.id
     
     await message.bot.send_chat_action(chat_id=client_id,
@@ -140,7 +138,6 @@ async def sol_valid_address(row: str) -> Optional[bool]:
 @reg_router.message(StateFilter(ActionWallets.sol_wallet))
 async def sol_reg_address(message: types.Message, state: FSMContext) -> None:
     sol_row = message.text
-    
     client_id = message.from_user.id
     
     await message.bot.send_chat_action(chat_id=client_id,
@@ -190,7 +187,6 @@ async def ton_valid_address(row: str) -> Optional[bool]:
 @reg_router.message(StateFilter(ActionWallets.ton_wallet))
 async def ton_reg_address(message: types.Message, state: FSMContext) -> None:
     ton_row = message.text
-    
     client_id = message.from_user.id
     
     await message.bot.send_chat_action(chat_id=client_id,
